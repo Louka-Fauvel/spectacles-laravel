@@ -52,9 +52,11 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $random = array_rand(static::$eventName);
+        $name = static::$eventName[$random];
         
         return [
-            'name' => array_rand(static::$eventName),
+            'name' => $name,
             'description' => fake()->text(),
             'date' => fake()->dateTime()->format('d/m/Y - H:i'),
             'nb_clients' => 0,
