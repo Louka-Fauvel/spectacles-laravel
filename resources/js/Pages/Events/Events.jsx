@@ -1,7 +1,19 @@
 import NavPublic from '@/Layouts/NavPublicLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 
 export default function Events({ auth, events }) {
+
+    const SubmitSearch = async (e) => {
+        e.preventDefault();
+        const search = {
+            search: e.target.search.value
+        }
+        if(e.target.search.value == "") {
+            router.get('/events');
+        } else {
+            router.get('/events', search, { preserveState: true });
+        }
+    }
 
     return (
         <NavPublic
@@ -11,6 +23,13 @@ export default function Events({ auth, events }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <form onSubmit={SubmitSearch}>
+                        <div className="space-x-2">
+                            <input type="text" name="search" className="p-2 border-2 border-white rounded-lg focus:outline-none focus:border-indigo-700"/>
+                            <button className="p-2 bg-indigo-700 rounded-lg hover:bg-indigo-500 text-gray-200">Search</button>
+                        </div>
+                    </form>
+
                     <div className="mt-5 grid grid-rows-1 lg:grid-cols-2 gap-2 text-gray-200">
                         {events.map((event) => {
                             return (
@@ -19,6 +38,13 @@ export default function Events({ auth, events }) {
                                         <h3 className="text-xl md:text-2xl">{event.name}</h3>
                                         <p className="py-2"><span className="p-2 bg-indigo-700 rounded-lg">{event.date}</span></p>
                                         <p>{event.description}</p>
+                                        <p className="py-2 space-x-2">
+                                            {event.tags.map((tag) => {
+                                                return (
+                                                    <span key={tag.id} className="p-2 bg-indigo-700 rounded-lg">{tag.name}</span>
+                                                );
+                                            })}
+                                        </p>
                                     </div>
                                 </Link>
                             );
